@@ -1,10 +1,11 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include "instructions.h"
 #include "program.h"
 
 static const int stackSize = 256;
 
-bool running = 1;
+bool running = true;
 int pc = 0;
 int sp = -1;
 int stack[stackSize];
@@ -20,7 +21,7 @@ void eval(int instruction) {
       break;
     }
     case PSH:  {
-      stack[++sp] = program[++ip];
+      stack[++sp] = program[++pc];
       break;
     }
     case POP: {
@@ -40,7 +41,7 @@ void eval(int instruction) {
 int main() {
   while(running) {
     eval(fetch());
-    ip++;
+    pc++;
   }
   return 0;
 }
