@@ -4,11 +4,13 @@
 #include "program.h"
 
 static const int stackSize = 256;
+static const int registerSize = 32;
 
 bool running = true;
 int pc = 0;
 int sp = -1;
 int stack[stackSize];
+int registers[registerSize];
 
 int fetch() {
   return program[pc];
@@ -29,10 +31,22 @@ void eval(int instruction) {
       printf("Popped %d\n", value);
     }
     case ADD: {
-      int value1 = stack[sp--];
-      int value2 = stack[sp--];
-      int sum = value1 + value2;
+      int valueA = stack[sp--];
+      int valueB = stack[sp--];
+      int sum = valueA + valueB;
       stack[++sp] = sum;
+      break;
+    }
+    case SET: {
+      int regNumber = program[++pc];
+      int regValue = program[++pc];
+      registers[regNumber] = regValue;
+      break;
+    }
+    case MOVE: {
+      int regA = program[++pc];
+      int regB = program[++pc];
+      registers[regB] = registers[regB];
       break;
     }
   }
